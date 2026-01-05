@@ -4,7 +4,8 @@
 username_regex='[a-zA-Z0-9._-]+'
 
 # you don't need to modify below, unless instagram breaks
-username_json_regex="\"value\": \"($username_regex)\","
+follower_username_json_regex="\"value\": \"($username_regex)\","
+following_username_json_regex="\"title\": \"($username_regex)\","
 
 if [ -f "followers_1.json" ]; then
 	echo "found followers_1.json"
@@ -27,8 +28,8 @@ fi
 followers_file="$(mktemp)"
 following_file="$(mktemp)"
 
-sed -nE "s/$username_json_regex/\1/p" followers_1.json | sed 's/^ *//' | sort > "$followers_file"
-sed -nE "s/$username_json_regex/\1/p" following.json | sed 's/^ *//' | sort > "$following_file"
+sed -nE "s/$follower_username_json_regex/\1/p" followers_1.json | sed 's/^ *//' | sort > "$followers_file"
+sed -nE "s/$following_username_json_regex/\1/p" following.json | sed 's/^ *//' | sort > "$following_file"
 
 difference="$(diff "$followers_file" "$following_file")"
 
